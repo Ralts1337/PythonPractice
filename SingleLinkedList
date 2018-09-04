@@ -1,0 +1,357 @@
+'Practice LinkedList ADT'
+# single linked list
+# Node has a value and a link to the next node
+
+class Node:
+    def __init__(self, value):
+        self.info = value
+        self.link = None
+
+
+class SingleLinkedList:
+    def __init__(self):
+        # links to the first node, now initialized to none
+        self.start = None
+# 2
+    def display_list(self):
+        if self.start is None:
+            print ('List is empty')
+        else:
+            print ('list is :')
+            # p is now the link to the first node
+            p = self.start
+            while p is not None:
+                print (p.info,'',end = '')
+                p = p.link
+            print ()
+# 2
+    def count_nodes(self):
+        p = self.start
+        n=0
+        while p is not None:
+            n+=1
+            p = p.link
+        print ('number of nodes is %d' %n)
+# 3
+    def search(self, x):
+    # if x is in list, return True
+        position =1
+        p=self.start
+        while p is not None:
+            if p.info ==x:
+                print(x,' is at position ',position)
+                return True
+            position +=1
+            p=p.link
+        else:
+            print(x,' is not found')
+            return False
+# 4
+    def insert_in_beginning(self, data):
+        temp = Node(data)
+        temp.link = self.start
+        self.start = temp
+# 5
+    def insert_at_end(self, data):
+        temp = Node(data)
+        if self.start is None:
+            self.start =temp
+            return
+        else:
+            p = self.start
+            while p.link is not None:
+                p=p.link
+            else:
+                p.link = temp
+
+    def create_list(self):
+        n = int(input('Enter the number of Nodes: '))
+        if n ==0:
+            return
+        else:
+            for i in range (n):
+                data = int(input('Enter the value of  Node'
+                                 ' %d: ' %(i+1)))
+                self.insert_at_end(data)
+# 6 add data after node x
+    def insert_after(self, data, x):
+        p = self.start
+        temp = Node(int(data))
+        while p is not None:
+            if p.info != x:
+                p = p.link
+            else:
+                temp.link = p.link
+                p.link = temp
+                break
+        else:
+            print('can\'t find value')
+# 7 add data before node x
+    def insert_before(self,data,x):
+        p = self.start
+        temp = Node(int(data))
+        if p.info == x:
+            self.insert_in_beginning(data)
+        else:
+            while p is not None:
+                if p.link.info == x:
+                    temp.link = p.link
+                    p.link = temp
+                    break
+                else:
+                    p = p.link
+            else:
+                print('can\'t find value')
+# 8 insert data at(before) position k
+    def insert_at_position(self, data, k):
+        p = self.start
+        temp = Node(data)
+        if k ==1:
+            self.insert_in_beginning(data)
+        else:
+            i=2
+            while i<k:
+                p=p.link
+                i+=1
+            temp.link = p.link
+            p.link = temp
+
+# 9 delete first node
+    def delete_first_node(self):
+        p= self.start
+        self.start = p.link
+
+# 10 delete last node
+    def delete_last_node(self):
+        p=self.start
+        while p.link.link is not None:
+            p = p.link
+        p.link = None
+
+#  11 delete any node
+    def delete_node(self, x):
+        p = self.start
+        if p.info ==x:
+            self.delete_first_node()
+        else:
+            while p.link is not None:
+                if  p.link.info!=x:
+                    print(p.info)
+                    p = p.link
+                else:
+                    p.link = p.link.link
+                    break
+
+#  12 reverse the list
+    def reverse_list(self):
+        prev = None
+        p = self.start
+        while p is not None:
+            next = p.link
+            p.link = prev
+            prev = p
+            p = next
+        self.start = prev
+# 13 bubble sort by exchanging data
+    def bubble_sort_exdata(self):
+        end = None
+
+        while end!=self.start.link: #sorting stops at 2nd node
+            p=self.start
+            while p.link !=end:
+                q=p.link
+                if p.info>q.info:
+                    p.info, q.info = q.info, p.info
+                p=p.link
+            end =p
+# 14 bubble sort by exchanging link
+    def bubble_sort_exlinks(self):
+        end = None
+        while end!= self.start.link: #ends at 2nd node
+            r = p = self.start
+            while p.link != end:
+                q = p.link
+                if p.info>q.info:
+                    p.link = q.link
+                    q.link = p
+                    if p!= self.start:
+                        r.link =q
+                    else:
+                        self.start = q
+                    p,q = q,p
+                r = p
+                p = p.link
+            end = p
+
+
+#15 merge sort
+    def mergelist(self, list2):
+        merge_list = SingleLinkedList() #create a new list
+        merge_list.start = self._merge1(self.start,list2.start)
+        return merge_list
+
+    # merge this list with another list2 by creating a new list and copy nodes
+    def _merge1(self,p1,p2):
+        #p1 is list 1 node 1; p2 is list2 node1
+        temp = None #pointer
+        if p2 is None:
+            return p1
+        elif p1 is None:
+            return p2
+        elif p1.info <p2.info:
+            firstNode = Node(p1.info)
+            p1 = p1.link
+        else:
+            firstNode =Node(p2.info)
+            p2=p2.link
+
+            temp = firstNode
+
+        while p1 is not None and p2 is not None:
+            if p1.info<=p2.info:
+                temp.link = Node(p1.info)
+                p1 = p1.link
+            else:
+                temp.link =p2
+                p2=p2.link
+            temp = temp.link
+
+        while p1 is not None:
+            temp.link = Node(p1.info)
+            p1 = p1.link
+            temp = temp.link
+        while p2 is not None:
+            temp.link = Node(p2.info)
+            p2 = p2.link
+            temp = temp.link
+
+        return firstNode
+
+    # merge this linst with another with changing links and sort
+    # two lists must be previously sorted
+    def  _merge2(self,p1,p2):
+
+        startM=None
+        if p1.info<= p2.info:
+            startM = p1
+            p1 = p1.link
+        else:
+            startM = p2
+            p2 = p2.link
+        pM=startM
+
+        while p1 is not None and p2 is not None:
+            if p1.info<=p2.info:
+                pM.link = p1
+                pM=pM.link
+                p1=p1.link
+            else:
+                pM.link = p2
+                pM = pM.link
+                p2 = p2.link
+        if p1 is None:
+            pM.link = p2
+        else:
+            pM.link = p1
+
+        return startM
+
+# 15  merge sort algorithm
+    def merge_sort(self):
+        self.start = self._merge_sort_rec(self.start)
+        # points to 1st node of sorted
+
+    # recursive merge sort
+    def _merge_sort_rec(self,list_start):
+        if list_start is None or list_start.link is None:
+            return list_start
+
+        start1 = list_start
+        start2 = self._divide_list(list_start)
+
+        start1 = self._merge_sort_rec(start1)
+        start2 = self._merge_sort_rec(start2)
+        startM= self._merge2(start1,start2)
+
+        return startM
+
+    def _divide_list(self,p):
+        q = p.link.link
+        while q is not None and q.link is not None:
+            p = p.link
+            q = q.link.link
+        start2 = p.link
+        p.link = None
+
+        return start2
+
+
+
+list = SingleLinkedList()
+list.create_list()
+
+while True:
+    list.display_list()
+    print('1.Display list')
+    print('2.Count Nodes')
+    print('3.Search for an element')
+    print('4.Insert in beginning')
+    print('5.Insert at end')
+    print('6.Insert after a node')
+    print('7.Insert before a node')
+    print('8.Insert at a given position')
+    print('9.Delete first node')
+    print('10.Delete last node')
+    print('11.Delete any node')
+    print('12.Reverse the list')
+    print('13.BubbleSort by exchanging data')
+    print('14.BubbleSort by exchanging links')
+    print('15.MergeSort')
+    print('16.Quit')
+
+    option = int(input('Enter your choice:'))
+    if option ==1:
+        list.display_list()
+    elif option ==2:
+        list.count_nodes()
+    elif option ==3:
+        data = int(input('Enter the element to be searched: '))
+        list.search(data)
+    elif option ==4:
+        data = int(input('Enter the element to be added'))
+        list.insert_in_beginning(data)
+    elif option == 5:
+        data = int(input('Enter the element to be added'))
+        list.insert_at_end(data)
+    elif option == 6:
+        data = int(input('Enter the element to be added'))
+        x = int(input('Enter the value you want to add it after'))
+        list.insert_after(data,x)
+    elif option == 7:
+        data = int(input('Enter the element to be added: '))
+        x = int(input('Enter the value you want to add it before: '))
+        list.insert_before(data, x)
+    elif option ==8:
+        data = int(input('Enter the element to be added: '))
+        k = int(input('Enter the position you want add it to: '))
+        list.insert_at_position(data,k)
+    elif option ==9:
+        list.delete_first_node()
+    elif option==10:
+        list.delete_last_node()
+    elif option ==11:
+        x = int(input('Enter the node value you want to delete: '))
+        list.delete_node(x)
+    elif option ==12:
+        list.reverse_list()
+    elif option ==13:
+        list.bubble_sort_exdata()
+    elif option ==14:
+        list.bubble_sort_exlinks()
+    elif option ==15:
+        list.merge_sort()
+        print('option15 done')
+    elif option ==16:
+        break
+    else:
+        print('not a valid option')
