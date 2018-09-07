@@ -1,0 +1,152 @@
+class Node(object):
+    def __init__(self,value):
+        self.info = value
+        self.link = None
+
+class CircularLinkedList(object):
+    def __init__(self):
+        self.last = None    #pointer of last element
+
+# 1 Display list
+    def display_list(self):
+        if self.last ==None:
+            print('List is empty')
+            return
+
+        p = self.last.link
+
+        while True:
+            print(p.info,' ', end ='')
+            p=p.link
+            if p==self.last.link:
+                break
+        print()
+
+# 3 Insert node in beginning
+    def insert_in_beginning(self,data):
+        temp = Node(data)
+        temp.link = self.last.link
+        self.last.link = temp
+
+# 2 insert in empty list
+    def insert_in_empty_list(self,data):
+        temp = Node(data)
+        self.last = temp
+        self.last.link = self.last
+
+#4  insert at end
+    def insert_at_end(self,data):
+        temp = Node(data)
+        temp.link = self.last.link
+        self.last.link = temp
+        self.last = temp
+
+#5 Insert after node
+    def insert_after(self):
+        x= int(input('Which node(value\) to insert after?'))
+        data = int(input('What value?'))
+        temp = Node(data)
+        p=self.last
+        if self.last.info ==x:
+            self.insert_at_end(data)
+            return
+        while p.info != data:
+            p=p.link
+        temp.link=p.link
+        p.link=temp
+
+#6 delete first node
+    def delete_first_node(self):
+        if self.last is None:
+            return
+        if self.last.link==self.last:
+            self.last = None
+            return
+        self.last.link = self.last.link.link
+#7 delete last node
+    def delete_last_node(self):
+        if self.last is None:
+            return
+        if self.last.link == self.last:
+            self.last = None
+            return
+
+        p = self.last.link
+        while p.link != self.last:
+            p = p.link
+        p.link = self.last.link
+        self.last = p
+
+#8 delete any node
+    def delete_node(self,data):
+        if self.last is None:
+            return
+        if self.last.link == self.last and self.last.info==data:
+            self.last = None
+            return
+        if self.last.link.info == data:
+            self.last.link = self.last.link.link
+            return
+        p = self.last.link
+        while p.link != self.last.link:
+            if p.link.info ==data:
+                break
+            p = p.link
+        if p.link == self.last.link:
+            print(data,' is not found in the list')
+        else:
+            p.link = p.link.link
+            if self.last.info == data:
+                self.last =p
+
+    def create_list(self):
+        n = int(input('How many nodes?'))
+        if n <1 :
+            print('Please give a valid number')
+        elif n ==1:
+            m = int(input('Enter the number'))
+            self.insert_in_empty_list(m)
+        else:
+            m = int(input('Input the value for node 1'))
+            self.insert_in_empty_list(m)
+            i =2
+            while i<(n+1):
+                m = int(input('Input the value for node %d' %i))
+                self.insert_at_end(m)
+                i+=1
+            return
+
+list = CircularLinkedList()
+list.create_list()
+
+while True:
+    print('1.Display List')
+    print('2.Insert in empty list')
+    print('3.Insert in beginning')
+    print('4.Insert at end')
+    print('5.Insert after a node')
+    print('6.Delete first node')
+    print('7.Delete last node')
+    print('8.Delete any node')
+    print('9.Quit')
+    m = int(input('Enter your choice'))
+    if m==1:
+        list.display_list()
+    elif m==2:
+        list.insert_in_empty_list()
+    elif m==3:
+        list.insert_in_beginning()
+    elif m==4:
+        list.insert_at_end()
+    elif m==5:
+        list.insert_after()
+    elif m==6:
+        list.delete_first_node()
+    elif m==7:
+        list.delete_last_node()
+    elif m==8:
+        x=int(input('Delete which value?'))
+        list.delete_node(x)
+    else:
+        print('Terminated')
+        break
